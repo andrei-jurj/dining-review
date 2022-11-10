@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -18,22 +19,22 @@ public class User {
 	@Column(name = "name", unique = true)
 	private String name;
 
+	@NotBlank(message = "City is mandatory")
 	@Column(name = "city")
 	private String city;
 
+	@NotBlank(message = "State is mandatory")
 	@Column(name = "state")
 	private String state;
 
+	@NotBlank(message = "Zip is mandatory")
 	@Column(name = "zip")
 	private String zipCode;
 
-	@Column(name = "peanutAllergy")
-	private boolean peanutAllergiesInterested;
+	private Boolean hasPeanutAllergy;
 
-	@Column(name = "eggAllergy")
-	private boolean eggAllergiesInterested;
+	private Boolean hasEggAllergy;
 
-	@Column(name = "dairyAllergy")
-	private boolean dairyAllergiesInterested;
+	private Boolean hasDairyAllergy;
 
 }

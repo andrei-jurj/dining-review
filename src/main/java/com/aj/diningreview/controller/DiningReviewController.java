@@ -5,6 +5,7 @@ import com.aj.diningreview.model.Status;
 import com.aj.diningreview.repository.DiningReviewRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class DiningReviewController {
     }
 
     @PostMapping("/reviews")
-    public DiningReview newDiningReview(@RequestBody DiningReview diningReview) {
+    public DiningReview newDiningReview(@RequestBody @Validated DiningReview diningReview) {
         //TODO: only if user exists then save it
         return diningReviewRepository.save(diningReview);
     }

@@ -3,6 +3,9 @@ package com.aj.diningreview.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "reviews")
@@ -13,15 +16,22 @@ public class DiningReview {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank
     @Column(name = "submitted_by")
     private String submittedBy;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "peanut_score")
     private Integer peanutScore;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "egg_score")
     private Integer eggScore;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "dairy_score")
     private Integer dairyScore;
 

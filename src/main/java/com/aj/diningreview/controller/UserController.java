@@ -26,9 +26,8 @@ public class UserController {
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAllUsers() {
 		try {
-			List<User> users = new ArrayList<>();
 
-			userRepository.findAll().forEach(users::add);
+			List<User> users = new ArrayList<>(userRepository.findAll());
 
 			if (users.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -59,9 +58,9 @@ public class UserController {
 			updatedUser.setCity(user.getCity());
 			updatedUser.setState(user.getState());
 			updatedUser.setZipCode(user.getZipCode());
-			updatedUser.setPeanutAllergiesInterested(user.isPeanutAllergiesInterested());
-			updatedUser.setEggAllergiesInterested(user.isEggAllergiesInterested());
-			updatedUser.setDairyAllergiesInterested(user.isDairyAllergiesInterested());
+			updatedUser.setHasPeanutAllergy(user.getHasPeanutAllergy());
+			updatedUser.setHasEggAllergy(user.getHasEggAllergy());
+			updatedUser.setHasDairyAllergy(user.getHasDairyAllergy());
 			return new ResponseEntity<>(userRepository.save(updatedUser), HttpStatus.OK);
 		}
 
