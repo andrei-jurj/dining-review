@@ -1,6 +1,6 @@
 package com.aj.diningreview.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 

@@ -1,6 +1,6 @@
 package com.aj.diningreview.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -19,6 +19,8 @@ public class DiningReview {
     @NotBlank
     @Column(name = "submitted_by")
     private String submittedBy;
+
+    private Long restaurantId;
 
     @Min(1)
     @Max(5)

@@ -3,6 +3,7 @@ package com.aj.diningreview.controller;
 import com.aj.diningreview.model.DiningReview;
 import com.aj.diningreview.model.Status;
 import com.aj.diningreview.repository.DiningReviewRepository;
+import com.aj.diningreview.repository.RestaurantRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +17,11 @@ public class DiningReviewController {
 
     private DiningReviewRepository diningReviewRepository;
 
-    public DiningReviewController(DiningReviewRepository diningReviewRepository) {
+    private RestaurantRepository restaurantRepository;
+
+    public DiningReviewController(DiningReviewRepository diningReviewRepository, RestaurantRepository restaurantRepository) {
         this.diningReviewRepository = diningReviewRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     @GetMapping("/admin/reviews")
@@ -42,8 +46,14 @@ public class DiningReviewController {
 
     @PostMapping("/reviews")
     public DiningReview newDiningReview(@RequestBody @Validated DiningReview diningReview) {
-        //TODO: only if user exists then save it
-        return diningReviewRepository.save(diningReview);
+
+        boolean restaurantExist =  restaurantRepository.existsById(diningReview.getRestaurantId());
+
+        if (restaurantExist) {
+            return diningReviewRepository.save(diningReview);
+        }
+
+        return null;
     }
 
     @GetMapping("/reviews/{id}")
