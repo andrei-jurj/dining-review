@@ -41,6 +41,7 @@ public class DiningReview {
     private String commentary;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }

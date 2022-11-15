@@ -1,5 +1,6 @@
 package com.aj.diningreview.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
         uniqueConstraints = { @UniqueConstraint(name = "UniqueNameAndZip",
                 columnNames = { "name", "zip" }) })
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Restaurant {
 
     @Id
@@ -31,6 +33,6 @@ public class Restaurant {
     private Integer dairyAllergyRating;
 
     @Column(name = "overall_rating")
-    private Float overallRating;
+    private Double overallRating;
 
 }

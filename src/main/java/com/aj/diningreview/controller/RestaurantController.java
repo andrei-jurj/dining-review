@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class RestaurantController {
 
-    private RestaurantRepository restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
     public RestaurantController(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
