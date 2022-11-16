@@ -1,5 +1,6 @@
 package com.aj.diningreview.controller;
 
+import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.model.DiningReview;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.repository.UserRepository;
@@ -21,7 +22,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@GetMapping("/users")
+	@GetMapping("/admin/users")
 	public List<User> all() {
 		return userRepository.findAll();
 	}
@@ -32,13 +33,13 @@ public class UserController {
 	}
 
 	public boolean userExists(DiningReview diningReview) {
-		return userRepository.findByName(diningReview.getSubmittedBy()) != null;
+		return userRepository.findByName(diningReview.getSubmittedBy()).isPresent();
 	}
 
-	@PutMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+	@PutMapping("/users/{name}")
+	public ResponseEntity<User> updateUser(@PathVariable("name") String name, @RequestBody User user) {
 
-		Optional<User> userData = userRepository.findById(id);
+		Optional<User> userData = userRepository.findByName(name);
 
 		if (userData.isPresent()) {
 			User updatedUser = userData.get();
@@ -55,12 +56,9 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{name}")
-	public ResponseEntity<User> getUsersByName(@PathVariable String name) {
+	public User getUsersByName(@PathVariable String name) {
 
-		if (userRepository.findByName(name) != null) {
-			return new ResponseEntity<>(userRepository.findByName(name), HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return userRepository.findByName(name)
+				.orElseThrow(() -> new UserNotFoundException(name));
 	}
 }

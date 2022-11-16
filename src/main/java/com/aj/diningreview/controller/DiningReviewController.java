@@ -2,7 +2,7 @@ package com.aj.diningreview.controller;
 
 import com.aj.diningreview.model.DiningReview;
 import com.aj.diningreview.model.Restaurant;
-import com.aj.diningreview.model.Status;
+import com.aj.diningreview.model.ReviewStatus;
 import com.aj.diningreview.repository.DiningReviewRepository;
 import com.aj.diningreview.repository.RestaurantRepository;
 import com.aj.diningreview.repository.UserRepository;
@@ -39,11 +39,11 @@ public class DiningReviewController {
 
         switch (status) {
             case "pending":
-                return diningReviewRepository.findByStatus(Status.PENDING);
+                return diningReviewRepository.findByReviewStatus(ReviewStatus.PENDING);
             case "approved":
-                return diningReviewRepository.findByStatus(Status.APPROVED);
+                return diningReviewRepository.findByReviewStatus(ReviewStatus.APPROVED);
             case "rejected":
-                return diningReviewRepository.findByStatus(Status.REJECTED);
+                return diningReviewRepository.findByReviewStatus(ReviewStatus.REJECTED);
             default:
                 return diningReviewRepository.findAll();
         }
@@ -51,19 +51,19 @@ public class DiningReviewController {
 
     @GetMapping("/admin/reviews/pending")
     public List<DiningReview> getPendingReviews() {
-        return diningReviewRepository.findByStatus(Status.PENDING);
+        return diningReviewRepository.findByReviewStatus(ReviewStatus.PENDING);
     }
 
     @PostMapping("/reviews")
     public DiningReview newDiningReview(@RequestBody @Validated DiningReview diningReview) {
 
         boolean restaurantExist = restaurantRepository.existsById(diningReview.getRestaurantId());
-        boolean userRegistered = userRepository.findByName(diningReview.getSubmittedBy()) != null;
+        boolean userRegistered = userRepository.findByName(diningReview.getSubmittedBy()).isPresent();
 
         //TODO: return proper status code when user is not registered or restaurant id is wrong
 
         if (restaurantExist && userRegistered) {
-            diningReview.setStatus(Status.PENDING);
+            diningReview.setReviewStatus(ReviewStatus.PENDING);
 
             return diningReviewRepository.save(diningReview);
         }
@@ -71,7 +71,7 @@ public class DiningReviewController {
         return null;
     }
 
-    @GetMapping("/reviews/{id}")
+    @GetMapping("/admin/reviews/{id}")
     public ResponseEntity<DiningReview> getDiningReviewById(@PathVariable Long id) {
 
         if (diningReviewRepository.findById(id).isPresent()) {
@@ -83,28 +83,28 @@ public class DiningReviewController {
 
     @PutMapping("/admin/reviews/{id}")
     public DiningReview approveOrRejectReview(@PathVariable Long id,
-                                              @RequestParam boolean isApproved) {
+                                              @RequestParam boolean accept) {
 
         if (diningReviewRepository.findById(id).isPresent()) {
             DiningReview diningReview = diningReviewRepository.findById(id).get();
 
-            if (isApproved) {
-                diningReview.setStatus(Status.APPROVED);
+            if (accept) {
+                diningReview.setReviewStatus(ReviewStatus.APPROVED);
                 diningReviewRepository.save(diningReview);
 
                 Long restaurantId = diningReview.getRestaurantId();
                 Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
 
-                List<DiningReview> diningReviews = diningReviewRepository.findByStatus(Status.APPROVED);
+                List<DiningReview> diningReviews = diningReviewRepository.findByReviewStatus(ReviewStatus.APPROVED);
 
                 double avgDairyScore = avgDairyScore(diningReviews);
                 double avgEggScore = avgEggScore(diningReviews);
                 double avgPeanutScore = avgPeanutScore(diningReviews);
                 double overall = (avgDairyScore + avgEggScore + avgPeanutScore) / 3;
 
-                restaurant.setDairyAllergyRating((int) avgDairyScore);
-                restaurant.setEggAllergyRating((int) avgEggScore);
-                restaurant.setPeanutAllergyRating((int) avgPeanutScore);
+                restaurant.setDairyAllergyRating(avgDairyScore);
+                restaurant.setEggAllergyRating(avgEggScore);
+                restaurant.setPeanutAllergyRating(avgPeanutScore);
                 restaurant.setOverallRating(Double.valueOf(df.format(overall)));
 
                 restaurantRepository.save(restaurant);
@@ -112,7 +112,7 @@ public class DiningReviewController {
             } else {
                 diningReviewRepository.findById(id)
                         .map(review -> {
-                            review.setStatus(Status.REJECTED);
+                            review.setReviewStatus(ReviewStatus.REJECTED);
                             return new ResponseEntity<>(diningReviewRepository.save(review), HttpStatus.OK);
                         });
             }

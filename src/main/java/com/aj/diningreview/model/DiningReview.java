@@ -1,5 +1,6 @@
 package com.aj.diningreview.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "reviews")
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiningReview {
 
     @Id
@@ -40,8 +42,8 @@ public class DiningReview {
     @Column(name = "commentary")
     private String commentary;
 
-    @Column(name = "status")
+    @Column(name = "reviewStatus")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ReviewStatus reviewStatus;
 
 }

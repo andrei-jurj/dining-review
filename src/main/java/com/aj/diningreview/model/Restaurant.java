@@ -24,13 +24,13 @@ public class Restaurant {
     private String zip;
 
     @Column(name = "peanut_allergy_rating")
-    private Integer peanutAllergyRating;
+    private Double peanutAllergyRating;
 
     @Column(name = "egg_allergy_rating")
-    private Integer eggAllergyRating;
+    private Double eggAllergyRating;
 
     @Column(name = "dairy_allergy_rating")
-    private Integer dairyAllergyRating;
+    private Double dairyAllergyRating;
 
     @Column(name = "overall_rating")
     private Double overallRating;

@@ -20,7 +20,7 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @PostMapping("/restaurants")
+    @PostMapping("/admin/restaurants")
     public Restaurant newRestaurant(@RequestBody Restaurant restaurant) {
         return restaurantRepository.save(restaurant);
     }
@@ -43,17 +43,17 @@ public class RestaurantController {
             case "egg":
                 return byZip.stream()
                         .filter(r -> r.getEggAllergyRating() != null)
-                        .sorted(Comparator.comparingLong(Restaurant::getEggAllergyRating).reversed())
+                        .sorted(Comparator.comparingDouble(Restaurant::getEggAllergyRating).reversed())
                         .collect(Collectors.toList());
             case "peanut":
                 return byZip.stream()
                         .filter(r -> r.getPeanutAllergyRating() != null)
-                        .sorted(Comparator.comparingLong(Restaurant::getPeanutAllergyRating).reversed())
+                        .sorted(Comparator.comparingDouble(Restaurant::getPeanutAllergyRating).reversed())
                         .collect(Collectors.toList());
             case "dairy":
                 return byZip.stream()
                         .filter(r -> r.getDairyAllergyRating() != null)
-                        .sorted(Comparator.comparingLong(Restaurant::getDairyAllergyRating).reversed())
+                        .sorted(Comparator.comparingDouble(Restaurant::getDairyAllergyRating).reversed())
                         .collect(Collectors.toList());
             default:
                 return byZip;
