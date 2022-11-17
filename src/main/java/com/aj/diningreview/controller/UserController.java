@@ -1,64 +1,43 @@
 package com.aj.diningreview.controller;
 
 import com.aj.diningreview.exception.UserNotFoundException;
-import com.aj.diningreview.model.DiningReview;
 import com.aj.diningreview.model.User;
-import com.aj.diningreview.repository.UserRepository;
+import com.aj.diningreview.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@GetMapping("/admin/users")
-	public List<User> all() {
-		return userRepository.findAll();
+	public ResponseEntity<List<User>> getAllUsers() throws UserNotFoundException {
+		return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
 	}
 
-	@PostMapping("/users")
-	public User newUser(@RequestBody @Validated User newUser) {
-		return userRepository.save(newUser);
+	@PostMapping("/user")
+	public ResponseEntity<User> saveUser(@RequestBody @Validated User user) { //throws UserAlreadyExistsException {
+		User savedUser = userService.saveUser(user);
+		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
 	}
 
-	public boolean userExists(DiningReview diningReview) {
-		return userRepository.findByName(diningReview.getSubmittedBy()).isPresent();
-	}
-
-	@PutMapping("/users/{name}")
+	@PutMapping("/user/{name}")
 	public ResponseEntity<User> updateUser(@PathVariable("name") String name, @RequestBody User user) {
-
-		Optional<User> userData = userRepository.findByName(name);
-
-		if (userData.isPresent()) {
-			User updatedUser = userData.get();
-			updatedUser.setCity(user.getCity());
-			updatedUser.setState(user.getState());
-			updatedUser.setZipCode(user.getZipCode());
-			updatedUser.setHasPeanutAllergy(user.getHasPeanutAllergy());
-			updatedUser.setHasEggAllergy(user.getHasEggAllergy());
-			updatedUser.setHasDairyAllergy(user.getHasDairyAllergy());
-			return new ResponseEntity<>(userRepository.save(updatedUser), HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(userService.updateUser(name, user), HttpStatus.OK);
 	}
 
-	@GetMapping("/users/{name}")
-	public User getUsersByName(@PathVariable String name) {
-
-		return userRepository.findByName(name)
-				.orElseThrow(() -> new UserNotFoundException(name));
+	@GetMapping("/user/{name}")
+	public ResponseEntity<User> getUserByName(@PathVariable String name) throws UserNotFoundException {
+		return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
 	}
 }

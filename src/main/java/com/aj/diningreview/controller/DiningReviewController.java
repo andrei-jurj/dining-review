@@ -1,137 +1,49 @@
 package com.aj.diningreview.controller;
 
 import com.aj.diningreview.model.DiningReview;
-import com.aj.diningreview.model.Restaurant;
 import com.aj.diningreview.model.ReviewStatus;
-import com.aj.diningreview.repository.DiningReviewRepository;
-import com.aj.diningreview.repository.RestaurantRepository;
-import com.aj.diningreview.repository.UserRepository;
+import com.aj.diningreview.service.DiningReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class DiningReviewController {
 
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+    private final DiningReviewService diningReviewService;
 
-    private final DiningReviewRepository diningReviewRepository;
-
-    private final RestaurantRepository restaurantRepository;
-
-    private final UserRepository userRepository;
-
-    public DiningReviewController(DiningReviewRepository diningReviewRepository, RestaurantRepository restaurantRepository,
-                                  UserRepository userRepository) {
-        this.diningReviewRepository = diningReviewRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.userRepository = userRepository;
+    public DiningReviewController(DiningReviewService diningReviewService) {
+        this.diningReviewService = diningReviewService;
     }
 
     @GetMapping("/admin/reviews")
     public List<DiningReview> reviewsByStatus(@RequestParam String status) {
-
-        switch (status) {
-            case "pending":
-                return diningReviewRepository.findByReviewStatus(ReviewStatus.PENDING);
-            case "approved":
-                return diningReviewRepository.findByReviewStatus(ReviewStatus.APPROVED);
-            case "rejected":
-                return diningReviewRepository.findByReviewStatus(ReviewStatus.REJECTED);
-            default:
-                return diningReviewRepository.findAll();
-        }
+        return diningReviewService.getReviewsByStatus(status);
     }
 
     @GetMapping("/admin/reviews/pending")
     public List<DiningReview> getPendingReviews() {
-        return diningReviewRepository.findByReviewStatus(ReviewStatus.PENDING);
+        return diningReviewService.findByReviewStatus(ReviewStatus.PENDING);
     }
 
-    @PostMapping("/reviews")
-    public DiningReview newDiningReview(@RequestBody @Validated DiningReview diningReview) {
-
-        boolean restaurantExist = restaurantRepository.existsById(diningReview.getRestaurantId());
-        boolean userRegistered = userRepository.findByName(diningReview.getSubmittedBy()).isPresent();
-
-        //TODO: return proper status code when user is not registered or restaurant id is wrong
-
-        if (restaurantExist && userRegistered) {
-            diningReview.setReviewStatus(ReviewStatus.PENDING);
-
-            return diningReviewRepository.save(diningReview);
-        }
-
-        return null;
+    @PostMapping("/review")
+    public DiningReview saveDiningReview(@RequestBody @Validated DiningReview diningReview) {
+        return diningReviewService.saveDiningReview(diningReview);
     }
 
-    @GetMapping("/admin/reviews/{id}")
+    @GetMapping("/admin/review/{id}")
     public ResponseEntity<DiningReview> getDiningReviewById(@PathVariable Long id) {
-
-        if (diningReviewRepository.findById(id).isPresent()) {
-            return new ResponseEntity<>(diningReviewRepository.findById(id).get(), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(diningReviewService.getDiningReviewById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/admin/reviews/{id}")
+    @PutMapping("/admin/review/{id}")
     public DiningReview approveOrRejectReview(@PathVariable Long id,
                                               @RequestParam boolean accept) {
 
-        if (diningReviewRepository.findById(id).isPresent()) {
-            DiningReview diningReview = diningReviewRepository.findById(id).get();
-
-            if (accept) {
-                diningReview.setReviewStatus(ReviewStatus.APPROVED);
-                diningReviewRepository.save(diningReview);
-
-                Long restaurantId = diningReview.getRestaurantId();
-                Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
-
-                List<DiningReview> diningReviews = diningReviewRepository.findByReviewStatus(ReviewStatus.APPROVED);
-
-                double avgDairyScore = avgDairyScore(diningReviews);
-                double avgEggScore = avgEggScore(diningReviews);
-                double avgPeanutScore = avgPeanutScore(diningReviews);
-                double overall = (avgDairyScore + avgEggScore + avgPeanutScore) / 3;
-
-                restaurant.setDairyAllergyRating(avgDairyScore);
-                restaurant.setEggAllergyRating(avgEggScore);
-                restaurant.setPeanutAllergyRating(avgPeanutScore);
-                restaurant.setOverallRating(Double.valueOf(df.format(overall)));
-
-                restaurantRepository.save(restaurant);
-
-            } else {
-                diningReviewRepository.findById(id)
-                        .map(review -> {
-                            review.setReviewStatus(ReviewStatus.REJECTED);
-                            return new ResponseEntity<>(diningReviewRepository.save(review), HttpStatus.OK);
-                        });
-            }
-
-            return diningReview;
-        }
-
-        return null;
-    }
-
-    //TODO: get rid of this duplication
-    private static double avgPeanutScore(List<DiningReview> byStatus) {
-        return byStatus.stream().collect(Collectors.averagingInt(DiningReview::getPeanutScore));
-    }
-
-    private static double avgEggScore(List<DiningReview> byStatus) {
-        return byStatus.stream().collect(Collectors.averagingInt(DiningReview::getEggScore));
-    }
-    private static double avgDairyScore(List<DiningReview> byStatus) {
-        return byStatus.stream().collect(Collectors.averagingInt(DiningReview::getDairyScore));
+        return diningReviewService.approveOrRejectDiningReview(id, accept);
     }
 }
