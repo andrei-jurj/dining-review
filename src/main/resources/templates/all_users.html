@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Users</title>
+</head>
+</head>
+<body>
+<table>
+  <thead>
+  <tr>
+    <th> # </th>
+    <th> User </th>
+    <th> City </th>
+    <th> State </th>
+    <th> Zip </th>
+    <th> Egg allergy </th>
+    <th> Peanut allergy </th>
+    <th> Dairy allergy </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${users.empty}">
+    <td colspan="2"> No Users Available </td>
+  </tr>
+  <tr th:each="user : ${users}">
+    <td><span th:text="${user.id}"> # </span></td>
+    <td><span th:text="${user.name}"> Username </span></td>
+    <td><span th:text="${user.city}"> City </span></td>
+    <td><span th:text="${user.state}"> State </span></td>
+    <td><span th:text="${user.zipCode}"> Zip code </span></td>
+    <td><span th:text="${user.hasEggAllergy}"> Egg allergy </span></td>
+    <td><span th:text="${user.hasPeanutAllergy}"> Peanut allergy </span></td>
+    <td><span th:text="${user.hasDairyAllergy}"> Dairy allergy </span></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Registration</title>
+    <style type="text/css">
+        span {
+        color: red;
+        font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <h1>User Registration</h1>
+    <form action="#" th:action="@{/register}" method="post" th:object="${user}">
+
+        <label>User name:</label>
+        <input type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">User name error</span><br/>
+
+        <label>City:</label>
+        <input type="text" th:field="*{city}" />
+        <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City error</span><br/>
+
+        <label>State:</label>
+        <input type="text" th:field="*{state}" />
+        <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}">State error</span><br/>
+
+        <label>Zip:</label>
+        <input type="text" th:field="*{zipCode}" />
+        <span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}">Zip error</span><br/>
+
+        <label>Peanut allergy?</label>
+        <input type="checkbox" th:field="*{hasPeanutAllergy}" /><br/>
+
+        <label>Egg allergy?</label>
+        <input type="checkbox" th:field="*{hasEggAllergy}" /><br/>
+
+        <label>Dairy allergy?</label>
+        <input type="checkbox" th:field="*{hasDairyAllergy}" /><br/>
+
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>

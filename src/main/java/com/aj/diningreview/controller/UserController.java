@@ -1,43 +1,47 @@
 package com.aj.diningreview.controller;
 
-import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
+import javax.validation.Valid;
 
-@RestController
-@RequestMapping("/api")
+@Controller
 public class UserController {
 
-	private final UserService userService;
+    UserService userService;
 
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-	@GetMapping("/admin/users")
-	public ResponseEntity<List<User>> getAllUsers() throws UserNotFoundException {
-		return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-	}
+    @GetMapping("/register")
+    public String showForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
 
-	@PostMapping("/user")
-	public ResponseEntity<User> saveUser(@RequestBody @Validated User user) { //throws UserAlreadyExistsException {
-		User savedUser = userService.saveUser(user);
-		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-	}
+        return "register_form";
+    }
 
-	@PutMapping("/user/{name}")
-	public ResponseEntity<User> updateUser(@PathVariable("name") String name, @RequestBody User user) {
-		return new ResponseEntity<>(userService.updateUser(name, user), HttpStatus.OK);
-	}
+    @PostMapping("/register")
+    public String submitForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
 
-	@GetMapping("/user/{name}")
-	public ResponseEntity<User> getUserByName(@PathVariable String name) throws UserNotFoundException {
-		return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
-	}
+        if (bindingResult.hasErrors()) {
+            return "register_form";
+        }
+
+        userService.saveUser(user);
+        return "register_success";
+    }
+
+    @GetMapping("/users")
+    public String showAll(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "all_users";
+    }
 }
