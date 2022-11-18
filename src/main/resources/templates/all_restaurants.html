@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Restaurants</title>
+</head>
+</head>
+<body>
+<table>
+  <thead>
+  <tr>
+    <th> Name </th>
+    <th> Zip </th>
+    <th> Egg allergy rating </th>
+    <th> Peanut allergy rating</th>
+    <th> Dairy allergy rating</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${restaurants.empty}">
+    <td colspan="2"> No Restaurants Available </td>
+  </tr>
+  <tr th:each="restaurant : ${restaurants}">
+    <td><span th:text="${restaurant.id}"> # </span></td>
+    <td><span th:text="${restaurant.name}"> Name </span></td>
+    <td><span th:text="${restaurant.zip}"> Zip code </span></td>
+    <td><span th:text="${restaurant.eggAllergyRating}"> Egg allergy </span></td>
+    <td><span th:text="${restaurant.peanutAllergyRating}"> Peanut allergy </span></td>
+    <td><span th:text="${restaurant.dairyAllergyRating}"> Dairy allergy </span></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

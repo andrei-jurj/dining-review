@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Registration Success</title>
+  <style type="text/css">
+        span {
+        display: inline-block;
+        width: 200px;
+        text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <h2>Restaurant created!</h2>
+    <span>Name:</span><span th:text="${restaurant.name}"></span><br/>
+    <span>Zip:</span><span th:text="${restaurant.zip}"></span><br/>
+    <span>Peanut allergy rating:</span><span th:text="${restaurant.peanutAllergyRating}"></span><br/>
+    <span>Egg allergy rating:</span><span th:text="${restaurant.eggAllergyRating}"></span><br/>
+    <span>Dairy allergy rating:</span><span th:text="${restaurant.dairyAllergyRating}"></span><br/>
+</div>
+</body>
+</html>

@@ -16,6 +16,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
+    @Override
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantRepository.findAll();
+    }
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
@@ -51,4 +55,5 @@ public class RestaurantServiceImpl implements RestaurantService {
                 return byZip;
         }
     }
+
 }

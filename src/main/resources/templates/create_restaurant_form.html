@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Restaurant</title>
+    <style type="text/css">
+        span {
+        color: red;
+        font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <h1>Add restaurant</h1>
+    <form action="#" th:action="@{/admin/restaurants/create}" method="post" th:object="${restaurant}">
+
+        <label>Resaurant name:</label>
+        <input type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Restaurant name error</span><br/>
+
+        <label>Zip:</label>
+        <input type="text" th:field="*{zip}" />
+        <span th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">Zip error</span><br/>
+
+        <label>Peanut allergy rating:</label>
+        <input type="number" step="0.1" th:field="*{peanutAllergyRating}" /><br/>
+
+        <label>Egg allergy rating:</label>
+        <input type="number" step="0.1" th:field="*{eggAllergyRating}" /><br/>
+
+        <label>Dairy allergy rating:</label>
+        <input type="number" step="0.1" th:field="*{dairyAllergyRating}" /><br/>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>
