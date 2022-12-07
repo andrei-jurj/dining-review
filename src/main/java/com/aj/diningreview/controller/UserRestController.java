@@ -22,18 +22,20 @@ public class UserRestController {
 
 	@GetMapping("/admin/users")
 	public ResponseEntity<List<User>> getAllUsers() throws UserNotFoundException {
-		return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+		return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
 	}
 
 	@PostMapping("/users")
-	public ResponseEntity<User> saveUser(@RequestBody @Validated User user) { //throws UserAlreadyExistsException {
-		User savedUser = userService.saveUser(user);
-		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+	public User postUser(@RequestBody @Validated User user) {
+		userService.postUser(user);
+		return user;
 	}
 
 	@PutMapping("/users/{name}")
-	public ResponseEntity<User> updateUser(@PathVariable("name") String name, @RequestBody User user) {
-		return new ResponseEntity<>(userService.updateUser(name, user), HttpStatus.OK);
+	public ResponseEntity<User> putUser(@PathVariable("name") String name, @RequestBody User user) {
+		return (userService.existsByName(name))
+				? new ResponseEntity<>(userService.putUser(name, user), HttpStatus.OK)
+				: new ResponseEntity<>(postUser(user), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/users/{name}")

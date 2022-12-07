@@ -1,6 +1,8 @@
 package com.aj.diningreview.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "users")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
 	@Id

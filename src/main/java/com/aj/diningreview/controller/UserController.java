@@ -35,13 +35,13 @@ public class UserController {
             return "register_form";
         }
 
-        userService.saveUser(user);
+        userService.postUser(user);
         return "register_success";
     }
 
     @GetMapping("/users")
     public String showAll(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAll());
         return "all_users";
     }
 }

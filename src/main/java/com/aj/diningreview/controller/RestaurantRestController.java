@@ -23,7 +23,7 @@ public class RestaurantRestController {
         return restaurantService.saveRestaurant(restaurant);
     }
 
-    @GetMapping("/restaurant/{id}")
+    @GetMapping("/restaurants/{id}")
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) {
         return new ResponseEntity<>(restaurantService.getRestaurantById(id), HttpStatus.OK);
     }

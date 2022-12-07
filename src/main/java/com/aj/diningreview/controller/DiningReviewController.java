@@ -30,17 +30,17 @@ public class DiningReviewController {
         return diningReviewService.findByReviewStatus(ReviewStatus.PENDING);
     }
 
-    @PostMapping("/review")
+    @PostMapping("/reviews")
     public DiningReview saveDiningReview(@RequestBody @Validated DiningReview diningReview) {
         return diningReviewService.saveDiningReview(diningReview);
     }
 
-    @GetMapping("/admin/review/{id}")
+    @GetMapping("/admin/reviews/{id}")
     public ResponseEntity<DiningReview> getDiningReviewById(@PathVariable Long id) {
         return new ResponseEntity<>(diningReviewService.getDiningReviewById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/admin/review/{id}")
+    @PutMapping("/admin/reviews/{id}")
     public DiningReview approveOrRejectReview(@PathVariable Long id,
                                               @RequestParam boolean accept) {
 
