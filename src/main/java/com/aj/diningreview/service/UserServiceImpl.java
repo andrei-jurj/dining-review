@@ -4,18 +4,17 @@ import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
-
+    public static final int USERS_PER_PAGE = 6;
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> findAll() throws UserNotFoundException {
-        return userRepository.findAll();
+        return (List<User>) userRepository.findAll();
     }
 
     @Override
@@ -62,29 +61,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findPaginated(int pageNo, int pageSize) {
+    public Page<User> listByPage(int pageNum, String sortField, String sortDir) {
+        Sort sort = Sort.by(sortField);
 
-        Pageable paging = PageRequest.of(pageNo, pageSize);
-        Page<User> pagedResult = userRepository.findAll(paging);
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
-        return pagedResult.toList();
-    }
-
-    public Page<User> findPaginated(Pageable pageable) {
-        List<User> users = userRepository.findAll();
-
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<User> list;
-
-        if (users.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, users.size());
-            list = users.subList(startItem, toIndex);
-        }
-
-        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), users.size());
+        Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
+        return userRepository.findAll(pageable);
     }
 }

@@ -14,6 +14,5 @@ public interface UserService {
     User putUser(String name, User user);
     User getUserByName(String name) throws UserNotFoundException;
     boolean existsByName(String name);
-    List<User> findPaginated(int pageNo, int pageSize);
-    Page<User> findPaginated(Pageable pageable);
+    Page<User> listByPage(int pageNum, String sortField, String sortDir);
 }
