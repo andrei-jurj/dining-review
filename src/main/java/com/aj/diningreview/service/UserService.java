@@ -14,5 +14,5 @@ public interface UserService {
     User putUser(String name, User user);
     User getUserByName(String name) throws UserNotFoundException;
     boolean existsByName(String name);
-    Page<User> listByPage(int pageNum, String sortField, String sortDir);
+    Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
 }
