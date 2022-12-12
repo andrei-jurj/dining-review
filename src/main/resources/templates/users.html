@@ -27,113 +27,16 @@
     <table class="table table-bordered table-striped table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
-          <th>
-            <a th:if="${sortField != 'id'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              ID
-            </a>
-            <a th:if="${sortField == 'id'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              ID
-            </a>
-
-            <span th:if="${sortField == 'id'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-
-          <th>
-            <a th:if="${sortField != 'name'}" class="text-white"
-              th:href="@{'/users/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              User
-            </a>
-            <a th:if="${sortField == 'name'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              User
-            </a>
-
-            <span th:if="${sortField == 'name'}"
-              th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-
-          <th>
-            <a th:if="${sortField != 'city'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=city&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              City
-            </a>
-            <a th:if="${sortField == 'city'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=city&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              City
-            </a>
-
-            <span th:if="${sortField == 'city'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-
-          <th>
-            <a th:if="${sortField != 'state'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=state&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              State
-            </a>
-            <a th:if="${sortField == 'state'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=state&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              State
-            </a>
-
-            <span th:if="${sortField == 'state'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
+          <th th:replace="fragments :: column_link('id', 'ID')" />
+          <th th:replace="fragments :: column_link('name', 'User')" />
+          <th th:replace="fragments :: column_link('city', 'City')" />
+          <th th:replace="fragments :: column_link('state', 'State')" />
 
           <th> Zip </th>
 
-          <th>
-            <a th:if="${sortField != 'hasEggAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasEggAllergy&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Egg allergy
-            </a>
-            <a th:if="${sortField == 'hasEggAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasEggAllergy&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Egg allergy
-            </a>
-
-            <span th:if="${sortField == 'hasEggAllergy'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-
-          <th>
-            <a th:if="${sortField != 'hasPeanutAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasPeanutAllergy&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Peanut allergy
-            </a>
-            <a th:if="${sortField == 'hasPeanutAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasPeanutAllergy&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Peanut allergy
-            </a>
-
-            <span th:if="${sortField == 'hasPeanutAllergy'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-
-          <th>
-            <a th:if="${sortField != 'hasDairyAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasDairyAllergy&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Dairy allergy
-            </a>
-            <a th:if="${sortField == 'hasDairyAllergy'}" class="text-white"
-               th:href="@{'/users/page/' + ${currentPage} + '?sortField=hasDairyAllergy&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
-              Dairy allergy
-            </a>
-
-            <span th:if="${sortField == 'hasDairyAllergy'}"
-                  th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}">
-            </span>
-          </th>
-          <th></th>
+          <th th:replace="fragments :: column_link('hasEggAllergy', 'Egg allergy')" />
+          <th th:replace="fragments :: column_link('hasPeanutAllergy', 'Peanut allergy')" />
+          <th th:replace="fragments :: column_link('hasDairyAllergy', 'Dairy allergy')" />
         </tr>
       </thead>
       <tbody>
@@ -174,22 +77,22 @@
     <nav>
       <ul class="pagination justify-content-center">
         <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-          <a class="page-link" th:href="@{'/users/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">First</a>
+          <th th:replace="fragments :: page_link('1', 'First')" />
         </li>
         <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-          <a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Previous</a>
+          <th th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')" />
         </li>
 
         <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
             th:each="i : ${#numbers.sequence(1, totalPages)}">
-          <a class="page-link" th:href="@{'/users/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">[[${i}]]</a>
+          <th th:replace="fragments :: page_link(${i}, ${i})" />
         </li>
 
         <li th:class="${currentPage != totalPages ? 'page-item' : 'page-item disabled'}">
-          <a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Next</a>
+          <th th:replace="fragments :: page_link(${currentPage + 1}, 'Next')" />
         </li>
         <li th:class="${currentPage != totalPages ? 'page-item' : 'page-item disabled'}">
-          <a class="page-link" th:href="@{'/users/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Last</a>
+          <th th:replace="fragments :: page_link(${totalPages}, 'Last')" />
         </li>
       </ul>
     </nav>
