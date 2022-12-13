@@ -3,9 +3,12 @@ package com.aj.diningreview.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +24,16 @@ public class User {
 	@NotBlank(message = "Name is mandatory")
 	@Column(name = "name", unique = true)
 	private String name;
+
+	@NotBlank(message = "Email is mandatory")
+	@Column(name = "email", unique = true)
+	@Email(regexp=".+@.+\\..+") //TODO:better regexp
+	private String email;
+
+	@Column(name = "password")
+	@NotNull
+	@Length(max = 64)
+	private String password;
 
 	@NotBlank(message = "City is mandatory")
 	@Column(name = "city")
@@ -40,4 +53,5 @@ public class User {
 
 	private Boolean hasDairyAllergy;
 
+	private Boolean enabled;
 }

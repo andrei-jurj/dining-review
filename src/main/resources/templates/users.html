@@ -24,11 +24,16 @@
   </div>
 
   <div>
+    <a th:href="@{/users/new}">Add new user</a>
+  </div>
+
+  <div>
     <table class="table table-bordered table-striped table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
           <th th:replace="fragments :: column_link('id', 'ID')" />
           <th th:replace="fragments :: column_link('name', 'User')" />
+          <th th:replace="fragments :: column_link('email', 'E-mail')" />
           <th th:replace="fragments :: column_link('city', 'City')" />
           <th th:replace="fragments :: column_link('state', 'State')" />
 
@@ -37,12 +42,15 @@
           <th th:replace="fragments :: column_link('hasEggAllergy', 'Egg allergy')" />
           <th th:replace="fragments :: column_link('hasPeanutAllergy', 'Peanut allergy')" />
           <th th:replace="fragments :: column_link('hasDairyAllergy', 'Dairy allergy')" />
+          <th th:replace="fragments :: column_link('enabled', 'Enabled')" />
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr th:each="user : ${users}">
           <td><span th:text="${user.id}"> # </span></td>
           <td><span th:text="${user.name}"> Username </span></td>
+          <td><span th:text="${user.email}"> E-mail </span></td>
           <td><span th:text="${user.city}"> City </span></td>
           <td><span th:text="${user.state}"> State </span></td>
           <td><span th:text="${user.zipCode}"> Zip code </span></td>
@@ -62,6 +70,9 @@
                   th:text="${user.hasDairyAllergy ? 'Yes' : 'No'}"> Dairy allergy
             </span>
           </td>
+          <td><span th:text="${user.enabled}"> Enabled </span></td>
+
+          <td>Edit - Delete</td>
         </tr>
       </tbody>
     </table>

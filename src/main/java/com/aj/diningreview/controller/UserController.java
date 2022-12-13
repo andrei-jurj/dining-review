@@ -25,25 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
-    public String showForm(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-
-        return "register_form";
-    }
-
-    @PostMapping("/register")
-    public String submitForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return "register_form";
-        }
-
-        userService.postUser(user);
-        return "register_success";
-    }
-
     @GetMapping("/users")
     public String listFirstPage(Model model) {
 
@@ -78,5 +59,20 @@ public class UserController {
         model.addAttribute("keyword", keyword);
 
         return "users";
+    }
+
+    @GetMapping("/users/new")
+    public String newUser(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+
+        return "user_form";
+    }
+
+    @PostMapping("/users/save")
+    public String saveUser(User user) {
+        System.out.println(user);
+
+        return "redirect:/users";
     }
 }
