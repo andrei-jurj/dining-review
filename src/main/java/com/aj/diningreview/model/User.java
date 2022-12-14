@@ -35,15 +35,12 @@ public class User {
 	@Length(max = 64)
 	private String password;
 
-	@NotBlank(message = "City is mandatory")
 	@Column(name = "city")
 	private String city;
 
-	@NotBlank(message = "State is mandatory")
 	@Column(name = "state")
 	private String state;
 
-	@NotBlank(message = "Zip is mandatory")
 	@Column(name = "zip")
 	private String zipCode;
 

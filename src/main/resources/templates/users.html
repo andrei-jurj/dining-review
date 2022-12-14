@@ -5,6 +5,7 @@
   <title>Users</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome/all.css}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -25,6 +26,10 @@
 
   <div>
     <a th:href="@{/users/new}">Add new user</a>
+  </div>
+
+  <div th:if="${message != null}" class="alert alert-success text-center">
+    [[${message}]]
   </div>
 
   <div>
@@ -54,18 +59,18 @@
           <td><span th:text="${user.city}"> City </span></td>
           <td><span th:text="${user.state}"> State </span></td>
           <td><span th:text="${user.zipCode}"> Zip code </span></td>
-          <td>
+          <td class="text-center">
             <span th:class="${user.hasEggAllergy ? 'badge badge-warning rounded-pill d-inline' : 'badge badge-success rounded-pill d-inline'}"
                   th:text="${user.hasEggAllergy ? 'Yes' : 'No'}"> Egg allergy
             </span>
           </td>
 
-          <td>
+          <td class="text-center">
             <span th:class="${user.hasPeanutAllergy ? 'badge badge-warning rounded-pill d-inline' : 'badge badge-success rounded-pill d-inline'}"
                   th:text="${user.hasPeanutAllergy ? 'Yes' : 'No'}"> Peanut allergy
             </span>
           </td>
-          <td>
+          <td class="text-center">
             <span th:class="${user.hasDairyAllergy ? 'badge badge-warning rounded-pill d-inline' : 'badge badge-success rounded-pill d-inline'}"
                   th:text="${user.hasDairyAllergy ? 'Yes' : 'No'}"> Dairy allergy
             </span>

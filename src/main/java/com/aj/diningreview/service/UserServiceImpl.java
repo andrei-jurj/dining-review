@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,19 +17,16 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     public static final int USERS_PER_PAGE = 6;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public List<User> findAll() throws UserNotFoundException {
         return (List<User>) userRepository.findAll();
-    }
-
-    @Override
-    public User postUser(User user) {
-        return userRepository.save(user);
     }
 
     @Override
@@ -73,5 +71,23 @@ public class UserServiceImpl implements UserService{
         }
 
         return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public boolean isEmailUnique(String email) {
+        User userByEmail = userRepository.getUserByEmail(email);
+
+        return userByEmail == null;
+    }
+
+    @Override
+    public void save(User user) {
+        encodePassword(user);
+        userRepository.save(user);
+    }
+
+    private void encodePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 }

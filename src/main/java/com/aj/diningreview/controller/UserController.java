@@ -7,13 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -64,14 +62,19 @@ public class UserController {
     @GetMapping("/users/new")
     public String newUser(Model model) {
         User user = new User();
+        user.setEnabled(true);
+
         model.addAttribute("user", user);
 
         return "user_form";
     }
 
     @PostMapping("/users/save")
-    public String saveUser(User user) {
+    public String saveUser(User user, RedirectAttributes redirectAttributes) {
         System.out.println(user);
+        userService.save(user);
+
+        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
 
         return "redirect:/users";
     }

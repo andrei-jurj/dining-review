@@ -3,6 +3,7 @@ package com.aj.diningreview.controller;
 import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.service.UserService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ public class UserRestController {
 
 	@PostMapping("/users")
 	public User postUser(@RequestBody @Validated User user) {
-		userService.postUser(user);
+		userService.save(user);
 		return user;
 	}
 
@@ -41,5 +42,10 @@ public class UserRestController {
 	@GetMapping("/users/{name}")
 	public ResponseEntity<User> getUserByName(@PathVariable String name) throws UserNotFoundException {
 		return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
+	}
+
+	@PostMapping("/users/check_email")
+	public String checkDuplicateEmail(@Param("email") String email) {
+		return userService.isEmailUnique(email) ? "OK" : "Duplicated";
 	}
 }
