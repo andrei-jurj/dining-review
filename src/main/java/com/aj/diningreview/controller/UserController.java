@@ -1,5 +1,6 @@
 package com.aj.diningreview.controller;
 
+import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.service.UserService;
 import com.aj.diningreview.service.UserServiceImpl;
@@ -65,6 +66,7 @@ public class UserController {
         user.setEnabled(true);
 
         model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "Create new user");
 
         return "user_form";
     }
@@ -77,5 +79,21 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
 
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/edit/{name}")
+    public String editUser(@PathVariable(name = "name") String name, RedirectAttributes redirectAttributes,
+                           Model model) {
+        try {
+            User user = userService.getUserByName(name);
+            model.addAttribute("user", user);
+            model.addAttribute("pageTitle", "Edit user (" + name + ")");
+
+            return "user_form";
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            return "redirect:/users";
+        }
     }
 }

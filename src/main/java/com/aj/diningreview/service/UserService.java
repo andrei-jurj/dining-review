@@ -14,6 +14,6 @@ public interface UserService {
     User getUserByName(String name) throws UserNotFoundException;
     boolean existsByName(String name);
     Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
-    boolean isEmailUnique(String email);
+    boolean isEmailUnique(String name, String email);
 
 }
