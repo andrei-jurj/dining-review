@@ -96,6 +96,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void updateUserEnabledStatus(String name, boolean enabled) {
+        userRepository.updateEnabledStatus(name, enabled);
+    }
+
+    @Override
     public void save(User user) {
         boolean isUpdatingUser = userRepository.findByName(user.getName()).isPresent();
 
