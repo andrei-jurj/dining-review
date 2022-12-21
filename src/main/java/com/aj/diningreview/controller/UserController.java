@@ -1,6 +1,7 @@
 package com.aj.diningreview.controller;
 
 import com.aj.diningreview.exception.UserNotFoundException;
+import com.aj.diningreview.exporter.UserCsvExporter;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.service.UserService;
 import com.aj.diningreview.service.UserServiceImpl;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -78,7 +81,12 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
 
-        return "redirect:/users";
+        return getRedirectURLtoAffectedUser(user);
+    }
+
+    private static String getRedirectURLtoAffectedUser(User user) {
+        String firstPartOfEmail = user.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
 
     @GetMapping("/users/edit/{name}")
@@ -106,5 +114,28 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", message);
 
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String updateUserEnabledStatus(@PathVariable("id") Long id,
+                                          Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.delete(id);
+            redirectAttributes.addFlashAttribute("message",
+                    "The user ID " + id + " has been deleted");
+
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+        }
+
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.findAll();
+        UserCsvExporter userCsvExporter = new UserCsvExporter();
+        userCsvExporter.export(userList, response);
     }
 }

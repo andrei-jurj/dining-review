@@ -16,5 +16,5 @@ public interface UserService {
     Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
     boolean isEmailUnique(String name, String email);
     void updateUserEnabledStatus(String name, boolean enabled);
-
+    void delete(Long id);
 }

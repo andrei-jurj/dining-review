@@ -15,6 +15,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     Optional<User> findByName(String name);
     boolean existsByName(String name);
+    Long countById(Long id);
 
     @Query("SELECT u from User u WHERE CONCAT(u.id, ' ', u.name, ' ', u.city, ' ', u.state, ' ', u.email) LIKE %?1%")
     Page<User> findAllSearch(String keyword, Pageable pageable);

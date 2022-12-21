@@ -101,6 +101,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void delete(Long id) {
+        Long countById = userRepository.countById(id);
+        if (countById == null || countById == 0) {
+            throw new UserNotFoundException(id);
+        }
+
+        userRepository.deleteById(id);
+    }
+
+    @Override
     public void save(User user) {
         boolean isUpdatingUser = userRepository.findByName(user.getName()).isPresent();
 
