@@ -2,6 +2,8 @@ package com.aj.diningreview.controller;
 
 import com.aj.diningreview.exception.UserNotFoundException;
 import com.aj.diningreview.exporter.UserCsvExporter;
+import com.aj.diningreview.exporter.UserExcelExporter;
+import com.aj.diningreview.exporter.UserPdfExporter;
 import com.aj.diningreview.model.User;
 import com.aj.diningreview.service.UserService;
 import com.aj.diningreview.service.UserServiceImpl;
@@ -137,5 +139,19 @@ public class UserController {
         List<User> userList = userService.findAll();
         UserCsvExporter userCsvExporter = new UserCsvExporter();
         userCsvExporter.export(userList, response);
+    }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.findAll();
+        UserExcelExporter userExcelExporter = new UserExcelExporter();
+        userExcelExporter.export(userList, response);
+    }
+
+    @GetMapping("/users/export/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.findAll();
+        UserPdfExporter userPdfExporter = new UserPdfExporter();
+        userPdfExporter.export(userList, response);
     }
 }
